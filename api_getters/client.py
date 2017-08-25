@@ -1,6 +1,7 @@
 import json
 import urllib
 
+
 class Artist(object):
     MUSIC_BRAINZ_URL = "http://musicbrainz.org/ws/2/artist/?query=artist:{formatted_name}&fmt=json"
 
@@ -12,10 +13,7 @@ class Artist(object):
     def mbid(self):
 
         if self._mbid is None:
-
-            formatted_name = urllib.quote(self.name.lower().replace("the", "").strip())
-
-            response = urllib.urlopen(self.MUSIC_BRAINZ_URL.format(formatted_name=formatted_name))
+            response = urllib.urlopen(self.MUSIC_BRAINZ_URL.format(formatted_name=self.formatted_name))
 
             data = json.loads(response.read())
 
@@ -25,18 +23,19 @@ class Artist(object):
 
         return self._mbid
 
+    @property
+    def formatted_name(self):
+        return urllib.quote(self.name.lower().replace("the", "").strip())
+
 
 class Client(object):
 
     def __init__(self):
         pass
 
-    def get_similarity(self, artist_name, artist_mbid):
+    def get_similarity(self, artist_obj):
         raise NotImplementedError
 
-    def get_popularity(self, artist_name, artist_mbid):
-        raise NotImplementedError
-
-    def get_mbid(self, artist_name):
+    def get_popularity(self, artist_obj):
         raise NotImplementedError
 
