@@ -1,29 +1,50 @@
-import json
 import urllib
+
+from lastfm import LastFm
+from musicbrainz import MusicBrainz
 
 
 class Artist(object):
-    MUSIC_BRAINZ_URL = "http://musicbrainz.org/ws/2/artist/?query=artist:{formatted_name}&fmt=json"
 
     def __init__(self, name):
         self.name = name
+
+        self._eventbrite = None
+        self._lastfm = None
+        self._musicbrainz = None
+        self._spotify = None
+
         self._mbid = None
-
-    @property
-    def mbid(self):
-
-        if self._mbid is None:
-            response = urllib.urlopen(self.MUSIC_BRAINZ_URL.format(formatted_name=self.formatted_name))
-
-            data = json.loads(response.read())
-
-            for artist in data['artists']:
-                if self.name.lower() in (artist['name'].lower(), artist['sort-name'].lower()):
-                    self._mbid = artist['id']
-
-        return self._mbid
+        self._similar_artists = None
 
     @property
     def formatted_name(self):
         return urllib.quote(self.name.lower().replace("the", "").strip())
 
+    @property
+    def musicbrainz(self):
+        if self._musicbrainz is None:
+            self._musicbrainz = MusicBrainz()
+
+        return self._musicbrainz
+
+    @property
+    def lastfm(self):
+        if self._lastfm is None:
+            self._lastfm = LastFm()
+
+        return self._lastfm
+
+    @property
+    def mbid(self):
+        if self._mbid is None:
+            self._mbid = self.musicbrainz.get_mbid(self)
+
+        return self._mbid
+
+    @property
+    def similar_artists(self):
+        if self._similar_artists is None:
+            self._similar_artists = self.lastfm.get_similar(self)
+
+        return self._similar_artists

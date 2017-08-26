@@ -1,2 +1,1 @@
-from client import Client, Artist
-from lastfm import LastFm
+from artist import Artist

@@ -1,6 +1,3 @@
-import json
-import urllib
-
 
 class Client(object):
 
