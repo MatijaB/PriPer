@@ -8,4 +8,4 @@ if __name__ == '__main__':
 
     print test_artist.formatted_name
     print test_artist.mbid
-    print test_artist.similar_artists
+    print test_artist.popularity

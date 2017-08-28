@@ -2,7 +2,7 @@ import urllib
 
 from lastfm import LastFm
 from musicbrainz import MusicBrainz
-
+from spotify import Spotify
 
 class Artist(object):
 
@@ -16,6 +16,7 @@ class Artist(object):
 
         self._mbid = None
         self._similar_artists = None
+        self._popularity = None
 
     @property
     def formatted_name(self):
@@ -34,7 +35,14 @@ class Artist(object):
             self._lastfm = LastFm()
 
         return self._lastfm
+    
+    @property
+    def spotify(self):
+        if self._spotify is None:
+            self._spotify = Spotify()
 
+        return self._spotify
+    
     @property
     def mbid(self):
         if self._mbid is None:
@@ -48,3 +56,10 @@ class Artist(object):
             self._similar_artists = self.lastfm.get_similar(self)
 
         return self._similar_artists
+
+    @property
+    def popularity(self):
+        if self._popularity is None:
+            self._popularity = self.spotify.get_popularity(self)
+
+        return self._popularity
