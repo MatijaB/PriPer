@@ -1,3 +1,4 @@
+import os
 import json
 import requests
 
@@ -5,8 +6,8 @@ import client
 
 
 class LastFm(client.Client):
-    APIKEY = "0d2dcafbf96aafcea7b77c7a54d2552e"
-    SECRET = "b13876c1031e15fc8123d6d58e98e33d"
+    APIKEY = os.environ.get("LASTFM_APIKEY", "")
+    SECRET = os.environ.get("LASTFM_SECRET", "")
 
     ENDPOINT = "http://ws.audioscrobbler.com/2.0/"
 

@@ -1,5 +1,6 @@
 import json
 import requests
+import spotipy
 
 import client
 
